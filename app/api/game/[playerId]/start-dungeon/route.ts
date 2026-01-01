@@ -38,7 +38,8 @@ export async function POST(
     try {
       const dungeonImageUrl = await generateDungeonRoomImage(
         "A magical crystal cave entrance with glowing gems and mysterious pathways",
-        dungeonTheme
+        dungeonTheme,
+        `dungeons/${dungeon.id}/entrance.png`
       );
       await db
         .update(dungeons)
@@ -79,7 +80,11 @@ export async function POST(
       // Generate room image
       let imageUrl = null;
       try {
-        imageUrl = await generateDungeonRoomImage(roomDesc.description, dungeonTheme);
+        imageUrl = await generateDungeonRoomImage(
+          roomDesc.description, 
+          dungeonTheme,
+          `dungeons/${dungeon.id}/rooms/${roomDesc.order}-${roomDesc.name.toLowerCase().replace(/\s+/g, '-')}.png`
+        );
       } catch (error) {
         console.error(`Failed to generate image for room ${roomDesc.name}:`, error);
       }

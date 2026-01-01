@@ -1,8 +1,9 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./schema";
+import "dotenv/config";
 
-// Initialize database connection
+// Initialize database connection with Neon
 // During build, DATABASE_URL may not be set, so we handle it gracefully
 function getDatabaseUrl(): string {
   const url = process.env.DATABASE_URL;
@@ -13,11 +14,15 @@ function getDatabaseUrl(): string {
       // Only in local production build, use dummy URL
       return "postgresql://dummy:dummy@localhost:5432/dummy";
     }
-    throw new Error("DATABASE_URL is not set. Please set it in your environment variables.");
+    throw new Error("DATABASE_URL is not set. Please set your Neon database URL in your environment variables.");
   }
   return url;
 }
 
-const client = postgres(getDatabaseUrl());
+// Create connection pool for Neon
+const client = postgres(getDatabaseUrl(), {
+  max: 1, // Neon serverless works best with connection pooling
+});
+
 export const db = drizzle(client, { schema });
 

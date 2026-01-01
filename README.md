@@ -15,10 +15,11 @@ A creative puzzle-solving dungeon crawler game designed for middle-grade players
 
 - **Framework**: Next.js 16 (App Router)
 - **Language**: TypeScript
-- **Database**: PostgreSQL with Drizzle ORM
+- **Database**: Neon PostgreSQL with Drizzle ORM
+- **Image Storage**: Vercel Blob Storage
 - **Styling**: Tailwind CSS
 - **UI Components**: Shadcn UI + Radix UI
-- **Image Generation**: Vercel AI Gateway + OpenAI DALL-E
+- **Image Generation**: OpenAI DALL-E (via Vercel AI Gateway optional)
 - **Deployment**: Vercel
 
 ## Getting Started
@@ -70,11 +71,14 @@ Open [http://localhost:3000](http://localhost:3000) to see the game.
 
 ## Database Setup
 
-### Using Supabase (Recommended)
+### Using Neon (Recommended)
 
-1. Create a new project on [Supabase](https://supabase.com)
-2. Get your connection string from Project Settings > Database
+1. Create a new project at [Neon](https://neon.tech)
+2. Copy your connection string from the project dashboard
 3. Add it to your `.env` file as `DATABASE_URL`
+   ```
+   DATABASE_URL=postgresql://user:password@host.neon.tech/dbname?sslmode=require
+   ```
 
 ### Using Local PostgreSQL
 
@@ -98,9 +102,10 @@ DATABASE_URL=postgresql://user:password@localhost:5432/dungeon_game
    - Click "Add New Project"
    - Import your GitHub repository
 3. Add environment variables in Vercel:
-   - `DATABASE_URL`
-   - `OPENAI_API_KEY`
-   - `VERCEL_AI_GATEWAY_URL` (optional)
+   - `DATABASE_URL` - Your Neon PostgreSQL connection string
+   - `BLOB_READ_WRITE_TOKEN` - Your Vercel Blob storage token
+   - `OPENAI_API_KEY` - Your OpenAI API key
+   - `VERCEL_AI_GATEWAY_URL` (optional) - If using Vercel AI Gateway
 4. Deploy!
 
 ### Manual Deployment
@@ -148,10 +153,30 @@ vercel
 
 | Variable | Description | Required |
 |----------|-------------|----------|
-| `DATABASE_URL` | PostgreSQL connection string | Yes |
+| `DATABASE_URL` | Neon PostgreSQL connection string | Yes |
+| `BLOB_READ_WRITE_TOKEN` | Vercel Blob storage read/write token | Yes |
 | `OPENAI_API_KEY` | OpenAI API key for image generation | Yes |
 | `VERCEL_AI_GATEWAY_URL` | Vercel AI Gateway URL (optional) | No |
 | `NEXT_PUBLIC_APP_URL` | Public app URL | No |
+
+### Getting Your Environment Variables
+
+**Neon Database:**
+1. Create a project at [neon.tech](https://neon.tech)
+2. Copy the connection string from your project dashboard
+3. Add it as `DATABASE_URL` in your `.env` file
+
+**Vercel Blob Storage:**
+1. Go to your Vercel project settings
+2. Navigate to Storage > Blob
+3. Create a new Blob store if needed
+4. Copy the `BLOB_READ_WRITE_TOKEN` from the store settings
+5. Add it to your `.env` file
+
+**OpenAI API Key:**
+1. Go to [platform.openai.com](https://platform.openai.com)
+2. Create an API key in your account settings
+3. Add it as `OPENAI_API_KEY` in your `.env` file
 
 ## Contributing
 
