@@ -21,11 +21,21 @@ export async function uploadImageToBlob(
     throw new Error("BLOB_READ_WRITE_TOKEN is not set. Please configure Vercel Blob storage.");
   }
 
+  // Skip placeholder URLs - don't try to upload them
+  if (imageUrl.includes("via.placeholder.com")) {
+    console.warn("Skipping placeholder image upload to Blob storage");
+    throw new Error("Cannot upload placeholder images to Blob storage");
+  }
+
   try {
     // Download the image from the generated URL
-    const imageResponse = await fetch(imageUrl);
+    const imageResponse = await fetch(imageUrl, {
+      // Add timeout to prevent hanging
+      signal: AbortSignal.timeout(30000), // 30 second timeout
+    });
+    
     if (!imageResponse.ok) {
-      throw new Error(`Failed to download image: ${imageResponse.statusText}`);
+      throw new Error(`Failed to download image: ${imageResponse.status} ${imageResponse.statusText}`);
     }
 
     const imageBlob = await imageResponse.blob();

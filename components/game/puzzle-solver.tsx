@@ -32,12 +32,12 @@ export function PuzzleSolver({ puzzle, onSolve }: PuzzleSolverProps) {
       case "riddle":
         return (
           <div className="space-y-4">
-            <p className="text-white text-lg">{puzzle.data.question as string}</p>
+            <p className="text-purple-100 text-lg leading-relaxed">{puzzle.data.question as string}</p>
             <input
               type="text"
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
-              className="w-full px-4 py-2 rounded-md bg-white/20 border border-white/30 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-5 py-4 rounded-lg bg-slate-900/50 border-2 border-purple-500/30 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-lg transition-all"
               placeholder="Your answer..."
               onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)}
             />
@@ -47,25 +47,27 @@ export function PuzzleSolver({ puzzle, onSolve }: PuzzleSolverProps) {
       case "pattern":
         return (
           <div className="space-y-4">
-            <p className="text-white">Complete the pattern:</p>
-            <div className="text-2xl font-mono text-white">
+            <p className="text-purple-100 text-lg font-semibold">Complete the pattern:</p>
+            <div className="text-3xl font-mono text-white bg-slate-800/50 p-6 rounded-lg border border-purple-500/30 text-center">
               {(puzzle.data.sequence as unknown[]).map((item, i) => (
                 <span key={i} className="mx-2">
-                  {item === "?" ? "?" : String(item)}
+                  {item === "?" ? <span className="text-purple-400">?</span> : String(item)}
                 </span>
               ))}
             </div>
             {(() => {
               const hint = puzzle.data.hint;
               return hint && typeof hint === "string" ? (
-                <p className="text-blue-200 text-sm">Hint: {hint}</p>
+                <p className="text-purple-300 text-sm bg-purple-900/30 p-3 rounded-lg border border-purple-500/20">
+                  💡 Hint: {hint}
+                </p>
               ) : null;
             })()}
             <input
               type="text"
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
-              className="w-full px-4 py-2 rounded-md bg-white/20 border border-white/30 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-5 py-4 rounded-lg bg-slate-900/50 border-2 border-purple-500/30 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-lg transition-all"
               placeholder="What comes next?"
               onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)}
             />
@@ -75,15 +77,15 @@ export function PuzzleSolver({ puzzle, onSolve }: PuzzleSolverProps) {
       case "word":
         return (
           <div className="space-y-4">
-            <p className="text-white">Unscramble this word:</p>
-            <div className="text-3xl font-bold text-white tracking-wider">
+            <p className="text-purple-100 text-lg font-semibold">Unscramble this word:</p>
+            <div className="text-4xl font-bold text-white tracking-wider bg-slate-800/50 p-6 rounded-lg border border-purple-500/30 text-center">
               {puzzle.data.scrambled as string}
             </div>
             <input
               type="text"
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
-              className="w-full px-4 py-2 rounded-md bg-white/20 border border-white/30 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-5 py-4 rounded-lg bg-slate-900/50 border-2 border-purple-500/30 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-lg transition-all uppercase"
               placeholder="Unscrambled word..."
               onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)}
             />
@@ -96,34 +98,49 @@ export function PuzzleSolver({ puzzle, onSolve }: PuzzleSolverProps) {
   }
 
   return (
-    <Card className="bg-white/10 backdrop-blur border-white/20">
+    <Card className="dungeon-card dungeon-glow">
       <CardHeader>
-        <CardTitle className="text-white">Solve the Puzzle</CardTitle>
-        <CardDescription className="text-blue-200">
+        <CardTitle className="text-white text-xl flex items-center gap-2">
+          <span className="text-2xl">🧩</span>
+          Solve the Puzzle
+        </CardTitle>
+        <CardDescription className="text-purple-200 text-base">
           {puzzle.type.charAt(0).toUpperCase() + puzzle.type.slice(1)} Puzzle
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
-        {renderPuzzleContent()}
+      <CardContent className="space-y-6">
+        <div className="bg-slate-900/50 p-6 rounded-lg border border-purple-500/30">
+          {renderPuzzleContent()}
+        </div>
         
         {result && (
           <div
-            className={`p-4 rounded-md ${
+            className={`p-5 rounded-lg border-2 ${
               result.solved
-                ? "bg-green-500/20 text-green-200 border border-green-500/30"
-                : "bg-red-500/20 text-red-200 border border-red-500/30"
+                ? "bg-gradient-to-r from-green-900/50 to-emerald-900/50 text-green-200 border-green-500/50 shadow-lg"
+                : "bg-gradient-to-r from-red-900/50 to-rose-900/50 text-red-200 border-red-500/50 shadow-lg"
             }`}
           >
-            {result.message}
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">{result.solved ? "✅" : "❌"}</span>
+              <span className="font-semibold">{result.message}</span>
+            </div>
           </div>
         )}
 
         <Button
           onClick={handleSubmit}
-          className="w-full"
+          className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold text-lg py-6 dungeon-glow disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={!answer.trim() || result?.solved}
         >
-          {result?.solved ? "Solved!" : "Submit Answer"}
+          {result?.solved ? (
+            <span className="flex items-center gap-2">
+              <span>✅</span>
+              Solved!
+            </span>
+          ) : (
+            "Submit Answer"
+          )}
         </Button>
       </CardContent>
     </Card>

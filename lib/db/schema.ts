@@ -8,6 +8,23 @@ export const players = pgTable("players", {
   health: integer("health").default(100).notNull(),
   maxHealth: integer("max_health").default(100).notNull(),
   inventory: jsonb("inventory").$type<string[]>().default([]).notNull(),
+  // Character stats
+  strength: integer("strength").default(10).notNull(),
+  intelligence: integer("intelligence").default(10).notNull(),
+  agility: integer("agility").default(10).notNull(),
+  wisdom: integer("wisdom").default(10).notNull(),
+  // Character appearance
+  appearance: jsonb("appearance").$type<{
+    gender?: string;
+    race?: string;
+    hairColor?: string;
+    hairStyle?: string;
+    eyeColor?: string;
+    skinTone?: string;
+    clothing?: string;
+    accessories?: string[];
+    portraitUrl?: string;
+  }>().default({}).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

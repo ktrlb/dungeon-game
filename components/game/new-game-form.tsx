@@ -35,17 +35,20 @@ export function NewGameForm() {
   }
 
   return (
-    <Card className="bg-white/10 backdrop-blur border-white/20">
+    <Card className="dungeon-card dungeon-glow max-w-2xl mx-auto">
       <CardHeader>
-        <CardTitle className="text-white">Character Details</CardTitle>
-        <CardDescription className="text-blue-200">
-          Choose a name for your adventurer
+        <CardTitle className="text-white text-2xl flex items-center gap-3">
+          <span className="text-3xl">⚔️</span>
+          Character Creation
+        </CardTitle>
+        <CardDescription className="text-purple-200 text-base">
+          Choose a name for your brave adventurer
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-white mb-2">
+            <label htmlFor="name" className="block text-sm font-semibold text-white mb-3">
               Character Name
             </label>
             <input
@@ -53,8 +56,8 @@ export function NewGameForm() {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-2 rounded-md bg-white/20 border border-white/30 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              placeholder="Enter your character name"
+              className="w-full px-5 py-4 rounded-lg bg-slate-900/50 border-2 border-purple-500/30 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-lg transition-all"
+              placeholder="Enter your character name..."
               required
               maxLength={50}
             />
@@ -62,10 +65,17 @@ export function NewGameForm() {
           <Button
             type="submit"
             size="lg"
-            className="w-full"
+            className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold text-lg py-6 dungeon-glow disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isLoading || !name.trim()}
           >
-            {isLoading ? "Creating..." : "Start Adventure"}
+            {isLoading ? (
+              <span className="flex items-center gap-2">
+                <span className="animate-spin">⚔️</span>
+                Creating Character...
+              </span>
+            ) : (
+              "Start Adventure"
+            )}
           </Button>
         </form>
       </CardContent>

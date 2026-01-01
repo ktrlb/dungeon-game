@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 
 export async function POST(request: Request) {
   try {
-    const { name } = await request.json();
+    const { name, appearance, stats } = await request.json();
 
     if (!name || typeof name !== "string" || name.trim().length === 0) {
       return NextResponse.json(
@@ -14,15 +14,31 @@ export async function POST(request: Request) {
       );
     }
 
-    // Create player
+    // Validate stats if provided
+    const finalStats = stats || {
+      strength: 10,
+      intelligence: 10,
+      agility: 10,
+      wisdom: 10,
+    };
+
+    // Calculate max health based on strength (base 100 + strength * 5)
+    const maxHealth = 100 + (finalStats.strength * 5);
+
+    // Create player with appearance and stats
     const [player] = await db
       .insert(players)
       .values({
         name: name.trim(),
         level: 1,
         experience: 0,
-        health: 100,
-        maxHealth: 100,
+        health: maxHealth,
+        maxHealth: maxHealth,
+        strength: finalStats.strength,
+        intelligence: finalStats.intelligence,
+        agility: finalStats.agility,
+        wisdom: finalStats.wisdom,
+        appearance: appearance || {},
         inventory: [],
       })
       .returning();
